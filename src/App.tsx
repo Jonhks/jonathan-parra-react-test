@@ -1,35 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { HashRouter, Route, Routes } from "react-router-dom";
+import {
+  Error404,
+  Login,
+  Products,
+  Users,
+  CreateProducts,
+} from "./pages/index";
+import NavBar from "./components/AppBar";
+import { ProtectedRoute } from "./components/ProtectedRedirect";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const auth = true;
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <HashRouter>
+      <NavBar auth={auth} />
+      <Routes>
+        <Route
+          path="/"
+          element={<Login />}
+        />
+        <Route
+          path="*"
+          element={<Error404 />}
+        />
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute auth={auth}>
+              <Products />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute auth={auth}>
+              <Users />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products/create"
+          element={
+            <ProtectedRoute auth={auth}>
+              <CreateProducts />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </HashRouter>
+  );
+};
 
-export default App
+export default App;
