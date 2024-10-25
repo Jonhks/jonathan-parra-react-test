@@ -13,6 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { useProductsStore } from "../store/store";
 
 const pages = [
   { text: "products", to: "products" },
@@ -21,7 +22,10 @@ const pages = [
 ];
 const settings = ["Logout"];
 
-const ResponsiveAppBar = ({ auth }: { auth: boolean }) => {
+const ResponsiveAppBar = () => {
+  const userAuth = useProductsStore((store) => store.userAuth);
+  const logout = useProductsStore((store) => store.logout);
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -103,7 +107,7 @@ const ResponsiveAppBar = ({ auth }: { auth: boolean }) => {
                 onClose={handleCloseNavMenu}
                 sx={{ display: { xs: "block", md: "none" } }}
               >
-                {auth &&
+                {userAuth &&
                   pages.map((page) => (
                     <Link
                       key={page.text}
@@ -142,7 +146,7 @@ const ResponsiveAppBar = ({ auth }: { auth: boolean }) => {
               TestTech
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {auth &&
+              {userAuth &&
                 pages.map((page) => (
                   <Link
                     key={page.text}
@@ -162,7 +166,7 @@ const ResponsiveAppBar = ({ auth }: { auth: boolean }) => {
                 ))}
             </Box>
             <Box sx={{ flexGrow: 0 }}>
-              {auth && (
+              {userAuth && (
                 <Tooltip title="Open settings">
                   <IconButton
                     onClick={handleOpenUserMenu}
@@ -194,7 +198,10 @@ const ResponsiveAppBar = ({ auth }: { auth: boolean }) => {
                 {settings.map((setting) => (
                   <MenuItem
                     key={setting}
-                    onClick={handleCloseUserMenu}
+                    onClick={() => {
+                      logout();
+                      handleCloseUserMenu();
+                    }}
                   >
                     <Typography sx={{ textAlign: "center" }}>
                       {setting}
