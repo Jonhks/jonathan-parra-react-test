@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,13 +8,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import classes from "./ProductsTable.module.css";
 import { useProductsStore } from "../../store/store";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface Column {
   id: string;
 }
 
-interface Data {
+export interface Data {
   id: number;
   title: string;
   price: string;
@@ -39,16 +39,10 @@ function createData(
 export default function ColumnGroupingTable() {
   const [page] = React.useState(0);
   const [rowsPerPage] = React.useState(20);
-  const getData = useProductsStore((store) => store.getData);
   const products = useProductsStore((store) => store.data);
-  console.log(products);
+  const getProductDetail = useProductsStore((store) => store.getProductDetail);
 
-  // const navigate = useNavigate();
-  useEffect(() => {
-    getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  const navigate = useNavigate();
   const newArrColums =
     products &&
     Object.keys(products[0]).map((product) => {
@@ -69,8 +63,6 @@ export default function ColumnGroupingTable() {
       `⭐️${row.rating.rate}` as string
     )
   );
-
-  console.log(products);
 
   return (
     <>
@@ -113,7 +105,10 @@ export default function ColumnGroupingTable() {
                         role="checkbox"
                         tabIndex={-1}
                         key={row.id}
-                        // onClick={() => navigate(`/products/${row.id}`)}
+                        onClick={() => {
+                          getProductDetail(row.id);
+                          navigate(`/products/${row.id}`);
+                        }}
                       >
                         {newArrColums.map((column: Column) => {
                           return (

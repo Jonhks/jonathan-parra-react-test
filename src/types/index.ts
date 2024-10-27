@@ -10,7 +10,6 @@ export const DetailProduct = z.object({
   title: z.string(),
   price: z.number(),
   description: z.string(),
-
   category: z.string(),
   image: z.string(),
   rating: z.object({
@@ -22,3 +21,4 @@ export const DetailProduct = z.object({
 export const DataProducts = z.array(DetailProduct);
 
 export type DataProducts = z.infer<typeof DataProducts>;
+export type DetailProduct = z.infer<typeof DetailProduct>;
