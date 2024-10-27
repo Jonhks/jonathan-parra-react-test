@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
-import { Error404, Users, CreateProducts } from "./pages/index";
+import { Error404, Users } from "./pages/index";
 import Login from "./pages/Login";
 import { Products } from "./pages/Products";
+import CreateProducts from "./pages/CreateProducts";
 import ProductsDetail from "./pages/ProductsDetail/ProductsDetail";
 import NavBar from "./components/AppBar";
 import { ProtectedRoute } from "./components/ProtectedRedirect";

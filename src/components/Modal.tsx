@@ -27,13 +27,14 @@ export default function BasicModal({
   showProductDetail,
   handleClose,
   deleteProduct,
+  getUpdateProduct,
 }: {
   idProduct: number;
   open: boolean;
   handleClose: () => void;
   showProductDetail: () => void;
   deleteProduct: () => void;
-  urlNavigate: string;
+  getUpdateProduct: () => void;
 }) {
   return (
     <div>
@@ -75,6 +76,10 @@ export default function BasicModal({
             <Button
               variant="contained"
               startIcon={<EditIcon />}
+              onClick={() => {
+                getUpdateProduct();
+                handleClose();
+              }}
             >
               Edit
             </Button>

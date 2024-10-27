@@ -20,6 +20,7 @@ type AppState = {
   getSortData: () => void;
   typeSort: boolean;
   deleteProduct: () => void;
+  getUpdateProduct: (newProduct: DataProducts[0]) => void;
 };
 
 export const useProductsStore = create<AppState>()(
@@ -159,7 +160,6 @@ export const useProductsStore = create<AppState>()(
           }
         },
         deleteProduct: async () => {
-          console.log(get().idProduct);
           set((state) => ({
             ...state,
             loading: true,
@@ -173,10 +173,9 @@ export const useProductsStore = create<AppState>()(
               ...state,
               success: true,
               data: get().data.filter((prod) => prod.id !== res.data.id),
-              // data: DataProducts.safeParse(res.data).data,
               loading: false,
             }));
-            toast.error("Producto eliminado correctamente", {
+            toast.success("Producto eliminado correctamente", {
               position: "bottom-right",
               theme: "light",
             });
@@ -191,6 +190,38 @@ export const useProductsStore = create<AppState>()(
               position: "bottom-right",
               theme: "light",
             });
+          }
+        },
+        getUpdateProduct: async (newProduct: DataProducts[0]) => {
+          set((state) => ({
+            ...state,
+            loading: true,
+          }));
+          try {
+            const resp = await axios({
+              method: "put",
+              url: "https://fakestoreapi.com/products/1",
+              data: newProduct,
+            });
+            set((state) => ({
+              ...state,
+              success: true,
+              data: get().data.map((product) =>
+                get().idProduct === product.id ? resp.data : product
+              ),
+              loading: false,
+            }));
+            toast.success("Producto editado correctamente", {
+              position: "bottom-right",
+              theme: "light",
+            });
+          } catch (err) {
+            console.error("Error in data fetch:", err);
+            set((state) => ({
+              ...state,
+              error: true,
+              errorData: "err.message",
+            }));
           }
         },
       }),

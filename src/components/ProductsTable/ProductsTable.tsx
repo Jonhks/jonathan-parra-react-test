@@ -47,6 +47,7 @@ export default function ColumnGroupingTable() {
   const getIdProduct = useProductsStore((store) => store.getIdProduct);
   const idProduct = useProductsStore((store) => store.idProduct);
   const deleteProduct = useProductsStore((store) => store.deleteProduct);
+  const getUpdateProduct = useProductsStore((store) => store.getUpdateProduct);
 
   const [openModal, setOpenModal] = React.useState(false);
   const handleOpen = () => setOpenModal(true);
@@ -71,7 +72,7 @@ export default function ColumnGroupingTable() {
       row.description,
       row.category,
       row.image,
-      `⭐️${row.rating.rate}` as string
+      `⭐️${row?.rating?.rate}` as string
     )
   );
 
@@ -173,6 +174,7 @@ export default function ColumnGroupingTable() {
         handleClose={handleClose}
         showProductDetail={showProductDetail}
         deleteProduct={deleteProduct}
+        getUpdateProduct={getUpdateProduct}
       />
     </>
   );
