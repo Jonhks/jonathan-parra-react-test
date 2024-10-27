@@ -1,13 +1,14 @@
 import { HashRouter, Route, Routes } from "react-router-dom";
-import { Error404, Products, Users, CreateProducts } from "./pages/index";
+import { Error404, Users, CreateProducts } from "./pages/index";
 import Login from "./pages/Login";
+import { Products } from "./pages/Products";
+// import ProductsDetail from "./pages/ProductsDetail";
 import NavBar from "./components/AppBar";
 import { ProtectedRoute } from "./components/ProtectedRedirect";
 import { useProductsStore } from "./store/store";
 
 const App = () => {
   const userAuth = useProductsStore((store) => store.userAuth);
-  console.log(userAuth);
 
   return (
     <HashRouter>
@@ -45,6 +46,14 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        {/* <Route
+          path="/products/:id"
+          element={
+            <ProtectedRoute auth={userAuth}>
+              <ProductsDetail />
+            </ProtectedRoute>
+          }
+        /> */}
       </Routes>
     </HashRouter>
   );
