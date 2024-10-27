@@ -9,6 +9,8 @@ import TableRow from "@mui/material/TableRow";
 import classes from "./ProductsTable.module.css";
 import { useProductsStore } from "../../store/store";
 import { useNavigate } from "react-router-dom";
+import SortIcon from "@mui/icons-material/Sort";
+import Modal from "../Modal";
 
 interface Column {
   id: string;
@@ -41,6 +43,13 @@ export default function ColumnGroupingTable() {
   const [rowsPerPage] = React.useState(20);
   const products = useProductsStore((store) => store.data);
   const getProductDetail = useProductsStore((store) => store.getProductDetail);
+  const getSortData = useProductsStore((store) => store.getSortData);
+  const getIdProduct = useProductsStore((store) => store.getIdProduct);
+  const idProduct = useProductsStore((store) => store.idProduct);
+
+  const [openModal, setOpenModal] = React.useState(false);
+  const handleOpen = () => setOpenModal(true);
+  const handleClose = () => setOpenModal(false);
 
   const navigate = useNavigate();
   const newArrColums =
@@ -52,6 +61,7 @@ export default function ColumnGroupingTable() {
         minWidth: `${(100 / Object.keys(products[0]).length).toFixed(2)}%`,
       };
     });
+
   const rows = products.map((row) =>
     createData(
       row.id,
@@ -63,6 +73,28 @@ export default function ColumnGroupingTable() {
       `⭐️${row.rating.rate}` as string
     )
   );
+
+  const renderCompoente = (id: string, row: Data) => {
+    let component;
+    if (id === "image") {
+      component = (
+        <img
+          src={row[id] as keyof Data}
+          alt={id}
+          width={30}
+          height={30}
+        />
+      );
+    } else {
+      component = row[id as keyof Data];
+    }
+    return component;
+  };
+
+  const showProductDetail = () => {
+    getProductDetail(idProduct);
+    navigate(`/products/${idProduct}`);
+  };
 
   return (
     <>
@@ -78,6 +110,15 @@ export default function ColumnGroupingTable() {
               stickyHeader
               aria-label="sticky table"
             >
+              <TableHead>
+                <TableRow>
+                  <TableCell align={"center"}>
+                    <button onClick={() => getSortData()}>
+                      <SortIcon />
+                    </button>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
               <TableHead>
                 <TableRow>
                   {newArrColums.map((column) => (
@@ -106,28 +147,15 @@ export default function ColumnGroupingTable() {
                         tabIndex={-1}
                         key={row.id}
                         onClick={() => {
-                          getProductDetail(row.id);
-                          navigate(`/products/${row.id}`);
+                          handleOpen();
+                          getIdProduct(row.id);
                         }}
                       >
                         {newArrColums.map((column: Column) => {
                           return (
-                            <>
-                              {column.id === "image" ? (
-                                <TableCell>
-                                  <img
-                                    src={row[column.id]}
-                                    alt={column.id}
-                                    width={30}
-                                    height={30}
-                                  />
-                                </TableCell>
-                              ) : (
-                                <TableCell align={"center"}>
-                                  {row[column.id as keyof Data]}
-                                </TableCell>
-                              )}
-                            </>
+                            <TableCell>
+                              {renderCompoente(column.id, row)}
+                            </TableCell>
                           );
                         })}
                       </TableRow>
@@ -138,6 +166,12 @@ export default function ColumnGroupingTable() {
           </TableContainer>
         </Paper>
       </div>
+      <Modal
+        idProduct={idProduct}
+        open={openModal}
+        handleClose={handleClose}
+        showProductDetail={showProductDetail}
+      />
     </>
   );
 }

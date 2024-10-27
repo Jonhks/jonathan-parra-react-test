@@ -16,12 +16,14 @@ type AppState = {
   idProduct: number;
   getIdProduct: (id: number) => void;
   productDetail: DataProducts[0];
+  getSortData: () => void;
+  typeSort: boolean;
 };
 
 export const useProductsStore = create<AppState>()(
   devtools(
     persist(
-      (set) => ({
+      (set, get) => ({
         loading: false,
         success: false,
         error: false,
@@ -45,6 +47,7 @@ export const useProductsStore = create<AppState>()(
           password: "",
         },
         userAuth: false,
+        typeSort: false,
         login: () => {
           set((state) => ({
             ...state,
@@ -101,7 +104,6 @@ export const useProductsStore = create<AppState>()(
         },
         getProductDetail: async (id) => {
           console.log(id);
-
           set((state) => ({
             ...state,
             loading: true,
@@ -116,6 +118,34 @@ export const useProductsStore = create<AppState>()(
               productDetail: res.data,
               loading: false,
               // idProduct: 0,
+            }));
+          } catch (err) {
+            console.error("Error in data fetch:", err);
+            set((state) => ({
+              ...state,
+              error: true,
+              errorData: "err.message",
+            }));
+          }
+        },
+        getSortData: async () => {
+          set((state) => ({
+            ...state,
+            loading: true,
+            typeSort: !state.typeSort,
+          }));
+          try {
+            const res = await axios.get(
+              `https://fakestoreapi.com/products?sort=${
+                get().typeSort ? "desc" : "asc"
+              }`
+            );
+            set((state) => ({
+              ...state,
+              success: true,
+              // data: res.data,
+              data: DataProducts.safeParse(res.data).data,
+              loading: false,
             }));
           } catch (err) {
             console.error("Error in data fetch:", err);
