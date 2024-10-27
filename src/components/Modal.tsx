@@ -6,6 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Stack from "@mui/material/Stack";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -25,11 +26,14 @@ export default function BasicModal({
   open,
   showProductDetail,
   handleClose,
+  deleteProduct,
 }: {
   idProduct: number;
   open: boolean;
   handleClose: () => void;
   showProductDetail: () => void;
+  deleteProduct: () => void;
+  urlNavigate: string;
 }) {
   return (
     <div>
@@ -78,6 +82,10 @@ export default function BasicModal({
               variant="contained"
               startIcon={<DeleteIcon />}
               color="error"
+              onClick={() => {
+                handleClose();
+                deleteProduct();
+              }}
             >
               Delete
             </Button>

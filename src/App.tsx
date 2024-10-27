@@ -7,6 +7,8 @@ import ProductsDetail from "./pages/ProductsDetail/ProductsDetail";
 import NavBar from "./components/AppBar";
 import { ProtectedRoute } from "./components/ProtectedRedirect";
 import { useProductsStore } from "./store/store";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   const userAuth = useProductsStore((store) => store.userAuth);
@@ -62,6 +64,7 @@ const App = () => {
           }
         />
       </Routes>
+      <ToastContainer />
     </HashRouter>
   );
 };

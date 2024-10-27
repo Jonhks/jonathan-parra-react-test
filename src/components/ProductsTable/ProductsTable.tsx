@@ -46,6 +46,7 @@ export default function ColumnGroupingTable() {
   const getSortData = useProductsStore((store) => store.getSortData);
   const getIdProduct = useProductsStore((store) => store.getIdProduct);
   const idProduct = useProductsStore((store) => store.idProduct);
+  const deleteProduct = useProductsStore((store) => store.deleteProduct);
 
   const [openModal, setOpenModal] = React.useState(false);
   const handleOpen = () => setOpenModal(true);
@@ -171,6 +172,7 @@ export default function ColumnGroupingTable() {
         open={openModal}
         handleClose={handleClose}
         showProductDetail={showProductDetail}
+        deleteProduct={deleteProduct}
       />
     </>
   );

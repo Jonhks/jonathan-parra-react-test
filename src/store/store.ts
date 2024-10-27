@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { User, DataProducts } from "../types";
 import { devtools, persist } from "zustand/middleware";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 type AppState = {
   user: User;
@@ -18,6 +19,7 @@ type AppState = {
   productDetail: DataProducts[0];
   getSortData: () => void;
   typeSort: boolean;
+  deleteProduct: () => void;
 };
 
 export const useProductsStore = create<AppState>()(
@@ -154,6 +156,41 @@ export const useProductsStore = create<AppState>()(
               error: true,
               errorData: "err.message",
             }));
+          }
+        },
+        deleteProduct: async () => {
+          console.log(get().idProduct);
+          set((state) => ({
+            ...state,
+            loading: true,
+          }));
+          try {
+            const res = await axios.delete(
+              `https://fakestoreapi.com/products/${get().idProduct}`
+            );
+
+            set((state) => ({
+              ...state,
+              success: true,
+              data: get().data.filter((prod) => prod.id !== res.data.id),
+              // data: DataProducts.safeParse(res.data).data,
+              loading: false,
+            }));
+            toast.error("Producto eliminado correctamente", {
+              position: "bottom-right",
+              theme: "light",
+            });
+          } catch (err) {
+            console.error("Error in data fetch:", err);
+            set((state) => ({
+              ...state,
+              error: true,
+              errorData: "err.message",
+            }));
+            toast.error("Producto NO se pudo ELIMINAR correctamente", {
+              position: "bottom-right",
+              theme: "light",
+            });
           }
         },
       }),
