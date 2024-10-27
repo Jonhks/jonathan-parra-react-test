@@ -61,6 +61,7 @@ export default function Login() {
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
+
   const login = useProductsStore((store) => store.login);
   const getUser = useProductsStore((store) => store.getUser);
 
@@ -70,6 +71,22 @@ export default function Login() {
       return;
     }
     const data = new FormData(event.currentTarget);
+    if (data.get("email") !== "admin@admin.com") {
+      setEmailError(true);
+      setPasswordError(true);
+      setPasswordErrorMessage("Invalid username.");
+      return;
+    }
+
+    if (data.get("password") !== "Admin$admin") {
+      setEmailError(true);
+      setPasswordError(true);
+      setPasswordErrorMessage(
+        "The password must be between 6 and 16 characters, at least one digit, at least one lowercase letter, at least one uppercase letter, and at least one non-alphanumeric character."
+      );
+      return;
+    }
+
     login(true);
     getUser({
       email: data.get("email") as string,
@@ -94,16 +111,20 @@ export default function Login() {
 
   const validateInputPassword = () => {
     const password = document.getElementById("password") as HTMLInputElement;
+    const regex =
+      /^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{6,12}$/;
+
     let isValid = true;
 
     if (
       !password.value ||
       password.value.length < 6 ||
-      password.value.length > 12
+      password.value.length > 12 ||
+      regex.test(password.value)
     ) {
       setPasswordError(true);
       setPasswordErrorMessage(
-        "The password must be at least 6 characters and a maximum of 12 characters."
+        "The password must be between 6 and 12 characters, at least one digit, at least one lowercase letter, at least one uppercase letter, and at least one non-alphanumeric character."
       );
       isValid = false;
     } else {
