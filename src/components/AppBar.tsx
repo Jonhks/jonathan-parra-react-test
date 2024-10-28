@@ -17,13 +17,14 @@ import { useProductsStore } from "../store/store";
 
 const pages = [
   { text: "products", to: "products" },
-  { text: "crear producto", to: "products/create" },
+  { text: "create product", to: "products/create" },
   { text: "users", to: "users" },
 ];
 const settings = ["Logout"];
 
 const ResponsiveAppBar = () => {
   const userAuth = useProductsStore((store) => store.userAuth);
+  const user = useProductsStore((store) => store.user);
   const logout = useProductsStore((store) => store.logout);
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -173,7 +174,7 @@ const ResponsiveAppBar = () => {
                     sx={{ p: 0 }}
                   >
                     <Avatar
-                      alt="Jonh Parra"
+                      alt={user.email}
                       src="/"
                     />
                   </IconButton>
