@@ -11,8 +11,8 @@ Este es el README del proyecto.
 
 ```js
  {
- email: admin@admin.com,
- password: Admin$admin
+    email: admin@admin.com,
+    password: Admin$admin
  }
 
 ```
