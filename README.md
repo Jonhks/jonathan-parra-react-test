@@ -12,7 +12,7 @@ Este es el README del proyecto.
 ```js
  {
     email: admin@admin.com,
-    password: Admin$admin1
+    password: Admin$admin11
  }
 
 ```

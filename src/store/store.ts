@@ -49,7 +49,7 @@ export const useProductsStore = create<AppState>()(
         idProduct: 0,
         user: {
           email: "admin@admin.com",
-          password: "Admin$admin",
+          password: "Admin$admin1",
         },
         userAuth: false,
         typeSort: false,
