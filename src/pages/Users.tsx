@@ -74,6 +74,15 @@ export default function Users() {
     }
     const data = new FormData(event.currentTarget);
 
+    if (data.get("password") !== "Admin$admin") {
+      setEmailError(true);
+      setPasswordError(true);
+      setPasswordErrorMessage(
+        "The password must be between 6 and 16 characters, at least one digit, at least one lowercase letter, at least one uppercase letter, and at least one non-alphanumeric character."
+      );
+      return;
+    }
+
     updateUser({
       email: data.get("email") as string,
       password: data.get("password") as string,
@@ -107,11 +116,6 @@ export default function Users() {
 
     let isValid = true;
 
-    setUserOrigin({
-      ...userOrigin,
-      password: password.value,
-    });
-
     if (
       !password.value ||
       password.value.length < 6 ||
@@ -127,6 +131,11 @@ export default function Users() {
       setPasswordError(false);
       setPasswordErrorMessage("");
     }
+
+    setUserOrigin({
+      ...userOrigin,
+      password: password.value,
+    });
 
     return isValid;
   };
