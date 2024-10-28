@@ -6,6 +6,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { FormControl, TextField } from "@mui/material";
 import classes from "./ProductsTable.module.css";
 import { useProductsStore } from "../../store/store";
 import { useNavigate } from "react-router-dom";
@@ -40,7 +41,7 @@ function createData(
 
 export default function ColumnGroupingTable() {
   const [page] = React.useState(0);
-  const [rowsPerPage] = React.useState(20);
+  const [rowsPerPage] = React.useState(25);
   const products = useProductsStore((store) => store.data);
   const getProductDetail = useProductsStore((store) => store.getProductDetail);
   const getSortData = useProductsStore((store) => store.getSortData);
@@ -118,6 +119,22 @@ export default function ColumnGroupingTable() {
                     <button onClick={() => getSortData()}>
                       <SortIcon />
                     </button>
+                  </TableCell>
+                  <TableCell>
+                    <FormControl>
+                      <TextField
+                        id="filter"
+                        type="text"
+                        name="filter"
+                        placeholder="Filter by name"
+                        autoComplete="filter"
+                        autoFocus
+                        required
+                        fullWidth
+                        variant="standard"
+                        sx={{ ariaLabel: "filter" }}
+                      />
+                    </FormControl>
                   </TableCell>
                 </TableRow>
               </TableHead>

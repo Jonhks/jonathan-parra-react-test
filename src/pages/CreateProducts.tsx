@@ -12,6 +12,8 @@ import {
   Divider,
 } from "@mui/material";
 import MuiCard from "@mui/material/Card";
+import { useNavigate } from "react-router-dom";
+import { useProductsStore } from "../store/store";
 
 const CreateProductContainer = styled(Stack)(({ theme }) => ({
   height: "calc((1 - var(--template-frame-height, 0)) * 100dvh)",
@@ -69,6 +71,9 @@ const CreateProducts = () => {
   const [errorUrl, setErrorUrl] = useState(false);
   const [urlErrorMessage, setUrlErrorMessage] = useState("");
 
+  const addNewProduct = useProductsStore((store) => store.addNewProduct);
+
+  const navigate = useNavigate();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (
@@ -81,16 +86,16 @@ const CreateProducts = () => {
       return;
     }
     const data = new FormData(event.currentTarget);
-    console.log(data.get("title"));
 
     const newProduct = {
-      title: data.get("title"),
-      price: data.get("price"),
-      category: data.get("category"),
-      description: data.get("description"),
-      image: data.get("urlImage"),
+      title: data.get("title")! as string,
+      price: data.get("price")! as string,
+      category: data.get("category")! as string,
+      description: data.get("description")! as string,
+      image: data.get("urlImage")! as string,
     };
-    console.log(newProduct);
+    navigate("/products");
+    addNewProduct(newProduct);
   };
 
   // ! Todo este código se puede re-factorizar!!!
