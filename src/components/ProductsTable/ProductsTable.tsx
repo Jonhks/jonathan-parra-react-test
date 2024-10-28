@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -6,7 +6,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { FormControl, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import classes from "./ProductsTable.module.css";
 import { useProductsStore } from "../../store/store";
 import { useNavigate } from "react-router-dom";
@@ -50,6 +50,24 @@ export default function ColumnGroupingTable() {
   const deleteProduct = useProductsStore((store) => store.deleteProduct);
   const getUpdateProduct = useProductsStore((store) => store.getUpdateProduct);
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
+  // Filtrar personas por nombre usando el valor con debounce
+  const filteredProducts = products.filter((product) =>
+    product.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+  );
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300); // Retraso de 300ms
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
+
   const [openModal, setOpenModal] = React.useState(false);
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => setOpenModal(false);
@@ -65,7 +83,7 @@ export default function ColumnGroupingTable() {
       };
     });
 
-  const rows = products.map((row) =>
+  const rows = filteredProducts.map((row) =>
     createData(
       row.id,
       row.title,
@@ -121,20 +139,18 @@ export default function ColumnGroupingTable() {
                     </button>
                   </TableCell>
                   <TableCell>
-                    <FormControl>
-                      <TextField
-                        id="filter"
-                        type="text"
-                        name="filter"
-                        placeholder="Filter by name"
-                        autoComplete="filter"
-                        autoFocus
-                        required
-                        fullWidth
-                        variant="standard"
-                        sx={{ ariaLabel: "filter" }}
-                      />
-                    </FormControl>
+                    <TextField
+                      id="filter"
+                      type="text"
+                      name="filter"
+                      placeholder="Filter by name"
+                      autoComplete="filter"
+                      fullWidth
+                      variant="standard"
+                      sx={{ ariaLabel: "filter" }}
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                   </TableCell>
                 </TableRow>
               </TableHead>
