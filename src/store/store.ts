@@ -22,6 +22,7 @@ type AppState = {
   deleteProduct: () => void;
   getUpdateProduct: () => void;
   addNewProduct: (product: NewProduct) => void;
+  updateUser: (user: User) => void;
 };
 
 export const useProductsStore = create<AppState>()(
@@ -47,8 +48,8 @@ export const useProductsStore = create<AppState>()(
         errorData: null,
         idProduct: 0,
         user: {
-          email: "",
-          password: "",
+          email: "admin@admin.com",
+          password: "Admin$admin",
         },
         userAuth: false,
         typeSort: false,
@@ -265,6 +266,16 @@ export const useProductsStore = create<AppState>()(
               errorData: "err.message",
             }));
           }
+        },
+        updateUser: (user) => {
+          set((state) => ({
+            ...state,
+            user,
+          }));
+          toast.success("Usuario editado correctamente", {
+            position: "bottom-right",
+            theme: "light",
+          });
         },
       }),
       {

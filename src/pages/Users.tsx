@@ -56,15 +56,16 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
   },
 }));
 
-export default function Login() {
+export default function Users() {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
 
-  const login = useProductsStore((store) => store.login);
-  const getUser = useProductsStore((store) => store.getUser);
   const user = useProductsStore((store) => store.user);
+  const updateUser = useProductsStore((store) => store.updateUser);
+
+  const [userOrigin, setUserOrigin] = React.useState(user);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -72,14 +73,8 @@ export default function Login() {
       return;
     }
     const data = new FormData(event.currentTarget);
-    if (data.get("email") !== user.email) {
-      setEmailError(true);
-      setPasswordError(true);
-      setPasswordErrorMessage("Invalid username.");
-      return;
-    }
 
-    if (data.get("password") !== user.password) {
+    if (data.get("password") !== "Admin$admin") {
       setEmailError(true);
       setPasswordError(true);
       setPasswordErrorMessage(
@@ -88,8 +83,7 @@ export default function Login() {
       return;
     }
 
-    login(true);
-    getUser({
+    updateUser({
       email: data.get("email") as string,
       password: data.get("password") as string,
     });
@@ -98,6 +92,11 @@ export default function Login() {
   const validateInputMail = () => {
     const email = document.getElementById("email") as HTMLInputElement;
     let isValid = true;
+
+    setUserOrigin({
+      ...userOrigin,
+      email: email.value,
+    });
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
@@ -116,6 +115,11 @@ export default function Login() {
       /^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{6,12}$/;
 
     let isValid = true;
+
+    setUserOrigin({
+      ...userOrigin,
+      password: password.value,
+    });
 
     if (
       !password.value ||
@@ -153,8 +157,9 @@ export default function Login() {
               textAlign: "center",
             }}
           >
-            Login
+            Edit user
           </Typography>
+          <Divider></Divider>
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -183,6 +188,7 @@ export default function Login() {
                 color={emailError ? "error" : "primary"}
                 sx={{ ariaLabel: "email" }}
                 onChange={validateInputMail}
+                value={userOrigin.email}
               />
             </FormControl>
             <FormControl>
@@ -194,7 +200,7 @@ export default function Login() {
                 helperText={passwordErrorMessage}
                 name="password"
                 placeholder="••••••"
-                type="password"
+                type="text"
                 id="password"
                 autoComplete="current-password"
                 autoFocus
@@ -203,6 +209,7 @@ export default function Login() {
                 variant="outlined"
                 color={passwordError ? "error" : "primary"}
                 onChange={validateInputPassword}
+                value={userOrigin.password}
               />
             </FormControl>
             <Button
@@ -215,10 +222,9 @@ export default function Login() {
               }}
               style={{ backgroundColor: "#0a0a0a" }}
             >
-              Sign in
+              save
             </Button>
           </Box>
-          <Divider></Divider>
         </Card>
       </SignInContainer>
     </>

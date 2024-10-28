@@ -53,7 +53,7 @@ export default function ColumnGroupingTable() {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
-  // Filtrar personas por nombre usando el valor con debounce
+  // Filtrar productos por titulo del producto usando el valor con debounce
   const filteredProducts = products.filter((product) =>
     product.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
   );
@@ -122,7 +122,7 @@ export default function ColumnGroupingTable() {
       <h2
         style={{ fontSize: "3rem", textAlign: "center", marginBottom: "2px" }}
       >
-        Productos
+        Products
       </h2>
       <div className={classes.containerTable}>
         <Paper sx={{ width: "80%" }}>
@@ -152,6 +152,8 @@ export default function ColumnGroupingTable() {
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </TableCell>
+                  <TableCell></TableCell>
+                  <TableCell>{rows.length} Products</TableCell>
                 </TableRow>
               </TableHead>
               <TableHead>
@@ -188,7 +190,7 @@ export default function ColumnGroupingTable() {
                       >
                         {newArrColums.map((column: Column) => {
                           return (
-                            <TableCell>
+                            <TableCell key={column.id}>
                               {renderCompoente(column.id, row)}
                             </TableCell>
                           );
