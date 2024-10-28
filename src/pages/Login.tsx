@@ -74,13 +74,11 @@ export default function Login() {
     const data = new FormData(event.currentTarget);
     if (data.get("email") !== user.email) {
       setEmailError(true);
-      setPasswordError(true);
-      setPasswordErrorMessage("Invalid username.");
+      setEmailErrorMessage("Invalid username.");
       return;
     }
 
     if (data.get("password") !== user.password) {
-      setPasswordError(true);
       setPasswordError(true);
       setPasswordErrorMessage(
         "The password must be between 6 and 16 characters, at least one digit, at least one lowercase letter, at least one uppercase letter, and at least one non-alphanumeric character."
