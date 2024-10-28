@@ -80,7 +80,7 @@ export default function Login() {
     }
 
     if (data.get("password") !== user.password) {
-      setEmailError(true);
+      setPasswordError(true);
       setPasswordError(true);
       setPasswordErrorMessage(
         "The password must be between 6 and 16 characters, at least one digit, at least one lowercase letter, at least one uppercase letter, and at least one non-alphanumeric character."
