@@ -72,10 +72,6 @@ export const useProductsStore = create<AppState>()(
           set((state) => ({
             ...state,
             userAuth: false,
-            user: {
-              email: "",
-              password: "",
-            },
           }));
         },
         getData: async () => {
