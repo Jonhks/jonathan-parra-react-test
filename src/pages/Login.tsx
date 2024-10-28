@@ -119,7 +119,7 @@ export default function Login() {
       !password.value ||
       password.value.length < 6 ||
       password.value.length > 12 ||
-      regex.test(password.value)
+      !regex.test(password.value)
     ) {
       setPasswordError(true);
       setPasswordErrorMessage(
