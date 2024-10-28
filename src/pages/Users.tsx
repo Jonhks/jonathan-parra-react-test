@@ -80,13 +80,12 @@ export default function Users() {
       setPasswordErrorMessage(
         "The password must be between 6 and 16 characters, at least one digit, at least one lowercase letter, at least one uppercase letter, and at least one non-alphanumeric character."
       );
+      updateUser({
+        email: data.get("email") as string,
+        password: data.get("password") as string,
+      });
       return;
     }
-
-    updateUser({
-      email: data.get("email") as string,
-      password: data.get("password") as string,
-    });
   };
 
   const validateInputMail = () => {
